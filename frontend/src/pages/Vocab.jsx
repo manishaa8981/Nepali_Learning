@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../componenets/Navbar";
 import tutorImg from "/images/mmamama.png";
 const VocabularyIcon = ({ isPlaying }) => (
@@ -53,6 +53,7 @@ const teacherMessages = [
 ];
 
 export default function VocabularyClass() {
+  const [animatedShapes, setAnimatedShapes] = useState([]);
   const [currentCategory, setCurrentCategory] = useState("fruits");
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -171,11 +172,47 @@ export default function VocabularyClass() {
     setStatusMessage(message);
     setTimeout(() => setStatusMessage("शब्द सिक्न जारी राख्नुहोस्..."), 3000);
   };
+  useEffect(() => {
+    const shapes = Array.from({ length: 6 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 40 + 20,
+      color: [
+        "bg-yellow-300",
+        "bg-pink-300",
+        "bg-blue-300",
+        "bg-green-300",
+        "bg-purple-300",
+        "bg-orange-300",
+      ][i % 6],
+      delay: Math.random() * 4,
+    }));
+    setAnimatedShapes(shapes);
+  }, []);
 
   return (
-    <div>
-      <Navbar />
-      <div className="min-h-screen w-full bg-gradient-to-br from-blue-100 via-pink-100 to-yellow-100 animate-fadeIn p-6 md:p-10">
+    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 overflow-hidden">
+      {/* Floating Animation Shapes */}
+      <div className="fixed inset-0 pointer-events-none">
+        {animatedShapes.map((shape) => (
+          <div
+            key={shape.id}
+            className={`absolute rounded-full opacity-30 animate-bounce ${shape.color}`}
+            style={{
+              left: `${shape.x}%`,
+              top: `${shape.y}%`,
+              width: `${shape.size}px`,
+              height: `${shape.size}px`,
+              animationDelay: `${shape.delay}s`,
+              animationDuration: "4s",
+            }}
+          />
+        ))}
+      </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Navbar />
+
         <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-10 flex flex-col md:flex-row items-start justify-between gap-8 w-full h-full">
           {/* Left: Mascot & Controls */}
 
@@ -211,18 +248,7 @@ export default function VocabularyClass() {
               >
                 {isMuted ? "🔇 आवाज बन्द" : "🔊 आवाज खुला"}
               </button>
-
-              <button
-                onClick={getEncouragement}
-                className="bg-gradient-to-r from-pink-400 to-red-500 text-white px-6 py-3 text-lg rounded-xl font-semibold shadow-lg hover:scale-105 transition-all"
-              >
-                🌟 प्रेरणा पाउनुहोस्
-              </button>
             </div>
-
-            <p className="text-blue-700 font-bold text-lg animate-pulse tracking-wide">
-              {statusMessage}
-            </p>
           </div>
 
           {/* Right: Learning Content */}
@@ -349,37 +375,6 @@ export default function VocabularyClass() {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes bounce-slow {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
-        }
-
-        .animate-fadeIn {
-          animation: fadeIn 0.8s ease-out;
-        }
-
-        .animate-bounce-slow {
-          animation: bounce-slow 3s ease-in-out infinite;
-        }
-      `}</style>
     </div>
   );
 }
