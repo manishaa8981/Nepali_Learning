@@ -27,12 +27,12 @@ router.post("/pronounce", async (req, res) => {
   }
 
   const request = {
-    input: { text }, // ✅ FIXED
+    input: { text }, // FIXED
     voice: {
-      languageCode: "hi-IN", // ✅ Use Hindi
+      languageCode: "hi-IN", // Use Hindi
       name: "hi-IN-Wavenet-A",
-      // languageCode: "ne-IN", // ✅ Google supports this for Nepali
-      // ssmlGender: "FEMALE", // ✅ Confirm this exists
+      // languageCode: "ne-IN", // Google supports this for Nepali
+      // ssmlGender: "FEMALE", // Confirm this exists
     },
     audioConfig: { audioEncoding: "MP3" },
   };
