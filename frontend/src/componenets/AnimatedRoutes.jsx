@@ -5,8 +5,10 @@ import KidLearnApp from "../componenets/Kidzee";
 import PageTransition from "../componenets/PageTransition";
 import Homepage from "../pages/Homepage";
 import LandingPage from "../pages/LandingPage";
+import Login from "../pages/Login";
 import PronunciationTutor from "../pages/PronounciationTutor";
 import QuizGenerator from "../pages/QuizPage";
+import Signup from "../pages/Signup";
 import NepaliVocabularyTeacher from "../pages/Vocab";
 
 const AnimatedRoutes = () => {
@@ -28,6 +30,8 @@ const AnimatedRoutes = () => {
         <Route path="/vocab" element={<NepaliVocabularyTeacher />} />
         <Route path="/pronounciation" element={<PronunciationTutor />} />
         <Route path="/pagetransition" element={<PageTransition />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </>
   );
