@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Navbar from "../componenets/Navbar";
 import tutorImg from "/images/maambig.png"; // <-- Your cartoon image
 
@@ -96,11 +96,50 @@ const CommandTool = () => {
       setStatusMessage("🔄 रोकिनुभयो, अडियो प्रशोधन हुँदैछ...");
     }
   };
+  const [animatedShapes, setAnimatedShapes] = useState([]);
+
+  useEffect(() => {
+    const shapes = Array.from({ length: 6 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 40 + 20,
+      color: [
+        "bg-yellow-300",
+        "bg-pink-300",
+        "bg-blue-300",
+        "bg-green-300",
+        "bg-purple-300",
+        "bg-orange-300",
+      ][i % 6],
+      delay: Math.random() * 4,
+    }));
+    setAnimatedShapes(shapes);
+  }, []);
 
   return (
-    <div>
-      <Navbar />
-      <div className="min-h-screen w-full bg-gradient-to-br from-blue-100 via-pink-100 to-yellow-100 animate-fadeIn p-6 md:p-10">
+    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 overflow-hidden">
+      {/* Floating Animation Shapes */}
+      <div className="fixed inset-0 pointer-events-none">
+        {animatedShapes.map((shape) => (
+          <div
+            key={shape.id}
+            className={`absolute rounded-full opacity-30 animate-bounce ${shape.color}`}
+            style={{
+              left: `${shape.x}%`,
+              top: `${shape.y}%`,
+              width: `${shape.size}px`,
+              height: `${shape.size}px`,
+              animationDelay: `${shape.delay}s`,
+              animationDuration: "4s",
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {" "}
+        <Navbar />
         <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8 w-full h-full">
           {/* Left: Mascot & Controls */}
           <div className="flex flex-col items-center text-center w-full md:w-1/2 gap-5">
@@ -111,7 +150,7 @@ const CommandTool = () => {
             />
 
             <p className="text-lg md:text-xl text-gray-700 font-medium">
-              बोल्नुहोस् र हामी त्यसलाई नेपालीमा ट्रान्सक्राइब गर्छौं।
+              बोल्नुहोस् र हामी त्यसलाई नेपालीमा लिखित रूपमा रूपान्तरण गर्छौं।
             </p>
 
             <div>
