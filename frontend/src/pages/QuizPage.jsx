@@ -19,6 +19,7 @@ const QuizIcon = ({ isLoading }) => (
 const wordBank = ["फलफूल", "घर", "विद्यालय", "पानी", "रंग"];
 
 export default function QuizGenerator() {
+  const [animatedShapes, setAnimatedShapes] = useState([]);
   const [quiz, setQuiz] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
@@ -34,7 +35,24 @@ export default function QuizGenerator() {
       fetchQuiz(wordBank[currentIndex]);
     }
   }, [currentIndex]);
-
+  useEffect(() => {
+    const shapes = Array.from({ length: 6 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 40 + 20,
+      color: [
+        "bg-yellow-300",
+        "bg-pink-300",
+        "bg-blue-300",
+        "bg-green-300",
+        "bg-purple-300",
+        "bg-orange-300",
+      ][i % 6],
+      delay: Math.random() * 4,
+    }));
+    setAnimatedShapes(shapes);
+  }, []);
   const resetQuiz = () => {
     setCurrentIndex(0);
     setIsComplete(false);
@@ -86,9 +104,27 @@ export default function QuizGenerator() {
   };
 
   return (
-    <div>
-      <Navbar />
-      <div className="min-h-screen w-full bg-gradient-to-br from-blue-100 via-pink-100 to-yellow-100 animate-fadeIn p-6 md:p-10">
+    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 overflow-hidden">
+      {/* Floating Animation Shapes */}
+      <div className="fixed inset-0 pointer-events-none">
+        {animatedShapes.map((shape) => (
+          <div
+            key={shape.id}
+            className={`absolute rounded-full opacity-30 animate-bounce ${shape.color}`}
+            style={{
+              left: `${shape.x}%`,
+              top: `${shape.y}%`,
+              width: `${shape.size}px`,
+              height: `${shape.size}px`,
+              animationDelay: `${shape.delay}s`,
+              animationDuration: "4s",
+            }}
+          />
+        ))}
+      </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Navbar />
+
         <div className="bg-white rounded-3xl shadow-2xl p-6 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8 w-full h-full">
           {/* Left: Mascot & Controls */}
           <div className="flex flex-col items-center text-center w-full md:w-1/2 gap-5">
@@ -207,20 +243,20 @@ export default function QuizGenerator() {
                 {/* Answer Reveal Card */}
                 {showAnswer && (
                   <>
-                    {/* ✅ Message on top */}
+                    {/* Message on top */}
                     <div className="bg-blue-100 p-4 rounded-xl shadow animate-fadeIn text-center">
                       <p className="text-xl font-bold text-blue-800">
                         {statusMessage}
                       </p>
                     </div>
 
-                    {/* ✅ Correct Answer Below */}
+                    {/* Correct Answer Below */}
                     <div className="bg-green-50 p-5 rounded-xl shadow animate-fadeIn mt-4">
                       <h3 className="text-2xl font-bold text-gray-700 mb-2 tracking-wide">
                         सही उत्तर:
                       </h3>
                       <p className="text-3xl font-black text-green-700 tracking-wide">
-                        ✅ {quiz.answer}
+                        {quiz.answer}
                       </p>
                     </div>
                   </>
@@ -241,37 +277,6 @@ export default function QuizGenerator() {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes bounce-slow {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-10px);
-          }
-        }
-
-        .animate-fadeIn {
-          animation: fadeIn 0.8s ease-out;
-        }
-
-        .animate-bounce-slow {
-          animation: bounce-slow 3s ease-in-out infinite;
-        }
-      `}</style>
     </div>
   );
 }
