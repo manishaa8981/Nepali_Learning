@@ -1,157 +1,92 @@
+import { Play } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "../componenets/Navbar";
 
-const LandingPage = () => {
-  const showMessage = (message) => {
-    alert(message); // For now use alert for messages
-  };
+export default function KidsLearningHomepage() {
+  const [animatedShapes, setAnimatedShapes] = useState([]);
 
-  const selectCategory = (category) => {
-    const messages = {
-      letters: "Danny Dragon says: Let's learn the ABC together! 🐲✨",
-      numbers: "Oliver Owl hoots: Time to count! Who-o-o's ready? 🦉🔢",
-      shapes: "Bella Butterfly whispers: Let's find shapes everywhere! 🦋🔺",
-      colors: "Luna Unicorn sparkles: Colors make magic happen! 🦄🌈",
-      animals: "Freddie Frog croaks: Let's hop into nature! 🐸🌿",
-      fruits: "Ruby Rabbit nibbles: Healthy foods taste amazing! 🐰🥕",
-    };
-    showMessage(messages[category]);
-  };
-
-  const startGame = (game) => {
-    const messages = {
-      memory: "Let's test your memory! 🧠✨",
-      puzzle: "Puzzle time! Put the pieces together! 🧩",
-      quiz: "Quiz time! You can do it! 🤔💭",
-      drawing: "Time to be creative! Draw something awesome! 🎨✏️",
-    };
-    showMessage(messages[game]);
-  };
-
-  const startLearning = () => {
-    showMessage(
-      "🎉 Welcome to your learning adventure! Choose any category to begin! 🌟"
-    );
-  };
-
-  const categories = [
-    {
-      id: "letters",
-      icon: "🐲",
-      title: "Letters & ABC",
-      desc: "Learn the alphabet with Danny Dragon",
-    },
-    {
-      id: "numbers",
-      icon: "🦉",
-      title: "Numbers & Counting",
-      desc: "Count with Oliver the Wise Owl",
-    },
-    {
-      id: "shapes",
-      icon: "🦋",
-      title: "Shapes & Patterns",
-      desc: "Discover shapes with Bella Butterfly",
-    },
-    {
-      id: "colors",
-      icon: "🦄",
-      title: "Colors & Art",
-      desc: "Paint rainbows with Luna Unicorn",
-    },
-    {
-      id: "animals",
-      icon: "🐸",
-      title: "Animals & Nature",
-      desc: "Explore with Freddie the Frog",
-    },
-    {
-      id: "fruits",
-      icon: "🐰",
-      title: "Fruits & Foods",
-      desc: "Eat healthy with Ruby Rabbit",
-    },
-  ];
-
-  const games = [
-    {
-      id: "memory",
-      icon: "🧠",
-      title: "Memory Match",
-      desc: "Match the pairs!",
-    },
-    {
-      id: "puzzle",
-      icon: "🧩",
-      title: "Puzzle Time",
-      desc: "Complete the puzzle!",
-    },
-    { id: "quiz", icon: "❓", title: "Fun Quiz", desc: "Answer questions!" },
-    { id: "drawing", icon: "✏️", title: "Draw & Color", desc: "Be creative!" },
-  ];
+  useEffect(() => {
+    const shapes = Array.from({ length: 6 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 40 + 20,
+      color: [
+        "bg-yellow-300",
+        "bg-pink-300",
+        "bg-blue-300",
+        "bg-green-300",
+        "bg-purple-300",
+        "bg-orange-300",
+      ][i % 6],
+      delay: Math.random() * 4,
+    }));
+    setAnimatedShapes(shapes);
+  }, []);
 
   return (
-    <div>
-      <Navbar />
-      <div className="min-h-screen bg-gradient-to-br from-yellow-200 via-blue-300 to-pink-300 p-4 font-comic">
-        <header className="text-center mb-10 animate-bounceIn">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-pink-500 via-green-400 to-blue-400 bg-clip-text text-transparent mb-2 shadow-sm">
-            KIDS LEARNING WORLD
-          </h1>
+    <div className="min-h-screen bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200 overflow-hidden">
+      {/* Floating Animation Shapes */}
+      <div className="fixed inset-0 pointer-events-none">
+        {animatedShapes.map((shape) => (
           <div
-            className="w-28 h-28 bg-gradient-to-tr from-blue-300 to-blue-700 rounded-full mx-auto flex items-center justify-center text-5xl shadow-lg hover:scale-110 transform transition-all duration-300 cursor-pointer animate-float"
-            onClick={() => showMessage("Hi there! I'm Freddie the Frog! 🐸")}
-          >
-            🐸
-          </div>
-          <p className="text-xl text-gray-800 mt-4">
-            🌟 Let's Learn and Have Fun Together! 🌟
-          </p>
-        </header>
+            key={shape.id}
+            className={`absolute rounded-full opacity-30 animate-bounce ${shape.color}`}
+            style={{
+              left: `${shape.x}%`,
+              top: `${shape.y}%`,
+              width: `${shape.size}px`,
+              height: `${shape.size}px`,
+              animationDelay: `${shape.delay}s`,
+              animationDuration: "4s",
+            }}
+          />
+        ))}
+      </div>
 
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          {categories.map((cat) => (
-            <div
-              key={cat.id}
-              className="bg-white rounded-2xl p-6 text-center shadow-xl hover:scale-105 transform transition-all duration-300 cursor-pointer"
-              onClick={() => selectCategory(cat.id)}
-            >
-              <div className="text-5xl mb-3 animate-pulse">{cat.icon}</div>
-              <h3 className="text-xl font-bold text-gray-800 mb-1">
-                {cat.title}
-              </h3>
-              <p className="text-sm text-gray-500">{cat.desc}</p>
-            </div>
-          ))}
-        </section>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Navbar />
 
-        <section className="bg-white rounded-3xl p-8 shadow-2xl">
-          <h2 className="text-3xl text-center font-bold bg-gradient-to-r from-red-400 to-green-400 bg-clip-text text-transparent mb-6">
-            🎮 Fun Learning Games
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            {games.map((game) => (
-              <div
-                key={game.id}
-                className="bg-gradient-to-br from-indigo-400 to-purple-600 text-white p-4 rounded-xl text-center cursor-pointer hover:scale-105 transform transition duration-300"
-                onClick={() => startGame(game.id)}
+        {/* Hero Section */}
+        <section className="py-16 text-center">
+          <div className="bg-white/95 backdrop-blur-sm rounded-3xl mb-4 p-12 shadow-2xl max-w-4xl mx-auto">
+            <h2 className="text-5xl md:text-6xl font-bold mb-8 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+              Learning is Fun! 🚀
+            </h2>
+
+            <p className="text-xl  text-gray-700 mb-8 max-w-2xl mx-auto leading-relaxed">
+              शब्द सिक्ने रमाइलो तरिका, नयाँ शब्द र सही उच्चारण सिकौं!
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/home"
+                className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-green-500 hover:to-blue-600 transition-all transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2"
               >
-                <div className="text-4xl mb-2">{game.icon}</div>
-                <h4 className="font-bold text-lg">{game.title}</h4>
-                <p className="text-sm">{game.desc}</p>
-              </div>
-            ))}
+                <Play className="w-5 h-5" />
+                <span>Start Learning</span>
+              </Link>
+            </div>
           </div>
         </section>
 
-        <button
-          onClick={startLearning}
-          className="block mx-auto mt-10 bg-gradient-to-r from-teal-500 to-teal-400 text-white font-bold text-lg py-3 px-8 rounded-full shadow-md hover:shadow-xl hover:translate-y-[-2px] transition-all duration-300"
-        >
-          🚀 Start Learning Adventure!
-        </button>
+        {/* Footer */}
+        <footer className="py-12 text-center">
+          <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl">
+            <div className="flex items-center justify-center space-x-2 mb-4">
+              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
+                🌟
+              </div>
+              <span className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                KidsLearn
+              </span>
+            </div>
+            <p className="text-gray-600 mb-6">
+              Making learning fun, one adventure at a time!
+            </p>
+          </div>
+        </footer>
       </div>
     </div>
   );
-};
-
-export default LandingPage;
+}
