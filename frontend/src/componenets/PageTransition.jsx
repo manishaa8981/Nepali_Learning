@@ -15,7 +15,7 @@ const PageTransition = ({ trigger }) => {
     <>
       {showDragon && (
         <motion.img
-          src="/images/dragon.jpeg"
+          src="/images/image.png"
           alt="Flying Dragon"
           className="fixed top-1/3 left-0 z-50 pointer-events-none w-[200px]"
           initial={{ x: "-100%" }}
